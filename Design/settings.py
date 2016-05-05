@@ -14,6 +14,8 @@ BOT_NAME = 'Design'
 SPIDER_MODULES = ['Design.spiders']
 NEWSPIDER_MODULE = 'Design.spiders'
 
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0'
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'Design (+http://www.yourdomain.com)'
