@@ -33,12 +33,14 @@ class DesignPipeline(object):
 		sql = "insert into design.image (title,icon,img,tags,create_time,modify_time) values (%s,%s,%s,%s,%s,%s)"
 
 		images = ''
-		for image in item['img']:
-			images += image + ','
+		if item['img']:
+			for image in item['img']:
+				images += image + ','
 
 		tags = ''
-		for tag in item['tags']:
-			tags += tag + ','
+		if item['tags']:
+			for tag in item['tags']:
+				tags += tag + ','
 
 		cursor.execute(sql, (item['title'], item['icon'], images,tags,getCurrentTime(), getCurrentTime()))
 		dbObject.commit()
