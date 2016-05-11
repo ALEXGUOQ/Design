@@ -42,6 +42,12 @@ class DesignPipeline(object):
 			for tag in item['tags']:
 				tags += tag + ','
 
-		cursor.execute(sql, (item['title'], item['icon'], images,tags,getCurrentTime(), getCurrentTime()))
-		dbObject.commit()
+		icon = item['icon']
+
+		selectSql = 'SELECT id FROM image WHERE icon = "%s"' % icon
+		result = cursor.execute(selectSql)
+
+		if result == 0:
+			cursor.execute(sql, (item['title'], icon, images,tags,getCurrentTime(), getCurrentTime()))
+			dbObject.commit()
 		return item
