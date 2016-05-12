@@ -3,7 +3,6 @@ import scrapy
 
 from Design.items import DesignItem
 
-
 class Spider_tuyiyiIcon(scrapy.Spider):
     name = 'tuyiyiIcon'
 
@@ -37,8 +36,20 @@ class Spider_tuyiyiIcon(scrapy.Spider):
                 detailUrl = self.baseUrl + detailUrl[0]
                 yield scrapy.Request(detailUrl,callback=self.parseDetail,meta={'design':design})
 
+        nextPage = response.xpath('//div[@id="page"]/ul/li[@class="next"]/a/@href').extract()
+        if nextPage:
+            nextPage = self.baseUrl + nextPage[0]
+            yield scrapy.Request(nextPage,callback=self.parse)
 
     def parseDetail(self,response):
         design = response.meta['design']
         imgs = []
+
+        img = response.xpath('//div[@id="slider"]/p/img/@src').extract()
+        if img:
+            img = img[0]
+            imgs.append(img)
+
+        design['img'] = imgs
+
         yield design
