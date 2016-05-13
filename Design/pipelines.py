@@ -16,13 +16,12 @@ def getCurrentTime():
     # time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     return datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
-
 def dbHandle():
     conn = pymysql.connect(
-        # host='10.0.1.112',
-        host='localhost',
+        host='10.0.1.112',
+        # host='localhost',
         user='root',
-        passwd='root',
+        passwd='',
         db='design',
         charset='utf8',
         use_unicode=False
