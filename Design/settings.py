@@ -65,6 +65,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:41.0) Gecko/20100101 Firefo
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'Design.pipelines.DesignPipeline': 300,
+   'Design.Iconpipelines.Iconpipelines':400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

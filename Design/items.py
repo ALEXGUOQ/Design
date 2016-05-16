@@ -12,3 +12,7 @@ class DesignItem(scrapy.Item):
     icon = scrapy.Field()
     img = scrapy.Field()
     tags = scrapy.Field()
+
+class IconItem(scrapy.Item):
+    icon = scrapy.Field()
+    tags = scrapy.Field()
