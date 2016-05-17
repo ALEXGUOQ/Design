@@ -3,7 +3,7 @@ import scrapy
 
 from Design.items import DesignItem
 
-
+# 设计派 ->创意灵感
 class Spider_shejipaiWorks(scrapy.Spider):
     name = 'shejipaiWorks'
 

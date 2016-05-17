@@ -29,29 +29,17 @@ def dbHandle():
     )
     return conn
 
-
-class DesignPipeline(object):
+class PhotoGraphyPipelines(object):
     def process_item(self, item, spider):
         dbObject = dbHandle()
         cursor = dbObject.cursor()
-        sql = "insert into design.image (title,icon,img,tags,create_time,modify_time) values (%s,%s,%s,%s,%s,%s)"
-
-        images = ''
-        if item['img']:
-            for image in item['img']:
-                images += image + ','
-
-        tags = ''
-        if item['tags']:
-            for tag in item['tags']:
-                tags += tag + ','
-
+        sql = "insert into design.photography (icon,create_time,modify_time) values (%s,%s,%s)"
         icon = item['icon']
 
-        selectSql = 'SELECT id FROM image WHERE icon = "%s"' % icon
+        selectSql = 'SELECT id FROM photography WHERE icon = "%s"' % icon
         result = cursor.execute(selectSql)
 
         if result == 0:
-            cursor.execute(sql, (item['title'], icon, images, tags, getCurrentTime(), getCurrentTime()))
+            cursor.execute(sql, (icon,getCurrentTime(), getCurrentTime()))
             dbObject.commit()
         return item

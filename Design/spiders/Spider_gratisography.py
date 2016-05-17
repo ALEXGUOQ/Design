@@ -2,6 +2,7 @@
 import scrapy
 from Design.items import DesignItem
 
+
 class Spider_gratisography(scrapy.Spider):
 	name = 'gratisography'
 

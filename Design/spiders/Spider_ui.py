@@ -1,11 +1,9 @@
 #-*- coding:utf-8 -*-
 
 import scrapy
-
-# ui 作品
 from Design.items import DesignItem
 
-
+# ui 作品
 class Spider_ui(scrapy.Spider):
     name = 'ui'
 
@@ -29,10 +27,9 @@ class Spider_ui(scrapy.Spider):
 
     def parseItem(self,response):
         tag = response.meta['tag']
-
         for item in response.xpath('//div[@class="wpn"]/ul[@class="post post-works mtv cl"]/li'):
             design = DesignItem()
-            icon = item.xpath('./div[@class="cover pos"]/a/img/@src').extract()
+            icon = item.xpath('./div[@class="cover pos"]/a/img/@data-original').extract()
             if icon:
                 icon = icon[0]
                 design['icon'] = icon

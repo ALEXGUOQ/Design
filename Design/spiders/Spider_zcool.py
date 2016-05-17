@@ -15,6 +15,20 @@ class Spider_zcool(scrapy.Spider):
 	baseUrl = 'http://www.zcool.com.cn'
 
 	def parse(self, response):
+		for item in response.xpath('//div[@class="ccNav"]/ul/li'):
+			title = item.xpath('./a/text()').extract()
+			if title:
+				title = title[0]
+				tag = title.strip()
+
+				href = item.xpath('./a/@href').extract()
+				if href:
+					url = self.baseUrl + href[0]
+					yield scrapy.Request(url,callback=self.parseItem,meta={'tag':tag})
+
+	def parseItem(self,response):
+		tag = response.meta['tag']
+
 		for item in response.xpath('//div[@class="camWholeBox"]/ul[@class="layout camWholeBoxUl"]/li'):
 			design = DesignItem()
 
@@ -33,8 +47,9 @@ class Spider_zcool(scrapy.Spider):
 				design['icon'] = icon
 
 			tags = []
-			for tag in item.xpath('./div[@class="camLiCon"]/div[@class="camLiDes"]/a'):
-				str = tag.xpath('./text()').extract()
+			tags.append(tag)
+			for eachTag in item.xpath('./div[@class="camLiCon"]/div[@class="camLiDes"]/a'):
+				str = eachTag.xpath('./text()').extract()
 				if str:
 					tags.append(str[0])
 			design['tags'] = tags
@@ -57,10 +72,3 @@ class Spider_zcool(scrapy.Spider):
 
 		design['img'] = imgs
 		return design
-
-	# def getImg(self,html):
-	# 	reg = r'img .*? class="mb10"'
-	# 	imgre = re.compile(reg)
-	# 	imglist = re.findall(imgre, html)
-	# 	print imglist
-	# 	return imglist

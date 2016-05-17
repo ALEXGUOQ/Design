@@ -13,6 +13,18 @@ class Spider_uimaker(scrapy.Spider):
 	baseUrl = 'http://www.uimaker.com'
 
 	def parse(self, response):
+		for menuItem in response.xpath('//ul[@class="classnav"]/li'):
+			tag = menuItem.xpath('./a/text()').extract()
+			if tag:
+				tag = tag[0]
+
+			url = menuItem.xpath('./a/@href').extract()
+			if url:
+				url = url[0]
+				yield scrapy.Request(url,callback=self.parseItem,meta={'tag':tag})
+
+	def parseItem(self,response):
+		tag = response.meta['tag']
 		for item in response.xpath('//dl[@class="imglist"]/dt/ul/li'):
 			design = DesignItem()
 
@@ -25,6 +37,10 @@ class Spider_uimaker(scrapy.Spider):
 			if title:
 				title = title[0]
 				design['title'] = title
+
+			tags = []
+			tags.append(tag)
+			design['tags'] = tags
 
 			detailUrl = item.xpath('./h2/a/@href').extract()
 			if detailUrl:
@@ -49,5 +65,4 @@ class Spider_uimaker(scrapy.Spider):
 				imgs.append(img)
 
 		design['img'] = imgs
-		design['tags'] = []
 		yield design

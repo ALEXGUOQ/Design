@@ -13,6 +13,19 @@ class Spider_tuyiyi(scrapy.Spider):
 	baseUrl = 'http://www.tuyiyi.com'
 
 	def parse(self, response):
+		for menuItem in response.xpath('//div[@class="moquuso"]/li[@class="moquu_listscx"]'):
+			tag = menuItem.xpath('./a/text()').extract()
+			if tag:
+				tag = tag[0]
+
+			href = menuItem.xpath('./a/@href').extract()
+			if href:
+				href = href[0]
+				href = self.baseUrl + href
+				yield scrapy.Request(href,callback=self.parseItem,meta={'tag':tag})
+
+	def parseItem(self,response):
+		tag = response.meta['tag']
 		for item in response.xpath('//div[@id="list"]/ul/li'):
 			design = DesignItem()
 
@@ -30,7 +43,9 @@ class Spider_tuyiyi(scrapy.Spider):
 			else:
 				design['title'] = ''
 
-			design['tags'] = []
+			tags = []
+			tags.append(tag)
+			design['tags'] = tags
 
 			detailUrl = item.xpath('./div[@class="moquu_picc"]/a/@href').extract()
 			if detailUrl:
@@ -38,15 +53,11 @@ class Spider_tuyiyi(scrapy.Spider):
 				detailUrl = self.baseUrl + detailUrl
 				yield scrapy.Request(detailUrl,callback=self.parseDetail,meta={'design':design})
 
-		# nextPage = response.xpath('//div[@id="page"]/ul/li[@class="next"]/a/@href').extract()
-		# if nextPage:
-		# 	nextPage = nextPage[0]
-		# 	nextPage = self.baseUrl + nextPage
-		# 	yield scrapy.Request(nextPage,callback=self.parse)
-
-		for i in xrange(1,1126):
-			url = 'http://www.tuyiyi.com/show-33-31522-%d' % i
-			yield scrapy.Request(url, callback=self.parse)
+		nextPage = response.xpath('//div[@id="page"]/ul/li[@class="next"]/a/@href').extract()
+		if nextPage:
+			nextPage = nextPage[0]
+			nextPage = self.baseUrl + nextPage
+			yield scrapy.Request(nextPage, callback=self.parseItem,meta={'tag':tag})
 
 	def parseDetail(self,response):
 		design = response.meta['design']

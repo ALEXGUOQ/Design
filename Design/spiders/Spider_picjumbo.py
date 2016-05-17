@@ -1,7 +1,6 @@
 #-*- coding:utf-8 -*-
 import scrapy
-from Design.items import DesignItem
-
+from Design.items import IconItem
 
 class Spider_picjumbo(scrapy.Spider):
 	name = 'picjumbo'
@@ -26,16 +25,13 @@ class Spider_picjumbo(scrapy.Spider):
 			menuType = response.meta['menuType']
 
 			for item in response.xpath('//div[@class="content"]/div[@class="item_wrap"]/div[@class="single_img"]/a/img'):
-				design = DesignItem()
-
-				design['title'] = ''
+				design = IconItem()
 
 				img = item.xpath('./@src').extract()
 				if img:
 					img = img[0]
 					img = 'http:' + img
 					design['icon'] = img
-					design['img'] = ''
 
 					if menuType:
 						tags = []

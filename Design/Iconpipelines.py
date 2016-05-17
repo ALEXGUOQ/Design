@@ -18,11 +18,11 @@ def getCurrentTime():
 
 def dbHandle():
     conn = pymysql.connect(
-        # host='10.0.1.112',
-        host='localhost',
+        host='10.0.1.112',
+        # host='localhost',
         user='root',
-        # passwd='',
-        passwd='root',
+        passwd='',
+        # passwd='root',
         db='design',
         charset='utf8',
         use_unicode=False
