@@ -68,7 +68,6 @@ class Spider_tuyiyi(scrapy.Spider):
 			img = item.xpath('./@src').extract()
 			if img:
 				img = img[0]
-				img = self.baseUrl + img
 				imgs.append(img)
 
 		design['img'] = imgs
